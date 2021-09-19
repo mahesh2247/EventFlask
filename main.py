@@ -71,7 +71,7 @@ def register():
     return render_template('registerpage.html')
 
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/')
 def loginpage():
     return render_template('loginpage.html')
 
