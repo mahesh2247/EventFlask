@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+<!--    @use postcss-preset-env;-->
+
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; FONTAWESOME &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; https://fortawesome.github.com/Font-Awesome/ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; http://weloveiconfonts.com/ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+
+<!--@import url(https://weloveiconfonts.com/api/?family=fontawesome);-->
+
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; ERIC MEYER'S RESET CSS &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; https://meyerweb.com/eric/tools/css/reset/ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+
+<!--@import url(https://meyerweb.com/eric/tools/css/reset/reset.css);-->
+
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; FONTAWESOME &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+
+<!--[class*="fontawesome-"]:before {-->
+<!--  font-family: 'FontAwesome', sans-serif;-->
+<!--}-->
+
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; GENERAL &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+
+body {
+	background: #f4f4f4;
+	color: #5a5656;
+    display: grid;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.5;
+    line-width: 10;
+    margin: 0;
+    min-height: 10vh;
+    place-items: center;
+    }
+
+a { text-decoration: none; }
+
+h1 { font-size: 1em; }
+
+h1, p {
+	margin-bottom: 10px;
+}
+
+strong {
+	font-weight: bold;
+}
+
+<!--.uppercase { text-transform: uppercase; }-->
+
+<!--/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; LOGIN &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */-->
+
+#login {
+	margin: 50px auto;
+	width: 300px;
+}
+
+form fieldset input[type="text"],
+input[type="password"] {
+  appearance: none;
+	background: #e5e5e5;
+	border: none;
+	border-radius: 3px;
+	color: #5a5656;
+	font-family: inherit;
+	font-size: 14px;
+	height: 50px;
+	outline: none;
+	padding: 0px 10px;
+	width: 280px;
+}
+
+form fieldset input[type="submit"] {
+  appearance: none;
+	background-color: #008dde;
+	border: none;
+	border-radius: 3px;
+	color: #f4f4f4;
+	cursor: pointer;
+	font-family: inherit;
+	height: 50px;
+	text-transform: uppercase;
+	width: 300px;
+}
+
+form fieldset a {
+	color: #5a5656;
+	font-size: 10px;
+}
+
+form fieldset a:hover { text-decoration: underline; }
+
+.btn-round {
+	background: #5a5656;
+	border-radius: 50%;
+	color: #f4f4f4;
+	display: block;
+	font-size: 12px;
+	height: 50px;
+	line-height: 50px;
+	margin: 30px 125px;
+	text-align: center;
+	text-transform: uppercase;
+	width: 50px;
+}
+
+
+</style>
+    <meta charset="UTF-8">
+    <title>Login Here</title>
+</head>
+<body>
+<div class="topnav">
+  <a href="/main">Go to Home Page</a>
+    <a href="/userevents">View {{ content }}'s Registered Events</a>
+  <a class="active" href="/signout">Sign Out</a>
+      <a href="#" style="float: right;">Logged in as {{ content }}</a>
+</div>
+
+
+
+  <h1><strong>Event Creator Form</strong></h1>
+
+
+  <form name="regform" action="/createevent" method="post">
+
+    <fieldset>
+
+
+      <p><input type="text"  name="ename" placeholder="Enter Event Name"></p>
+
+
+      <p><input type="text"  name="etype" placeholder="Enter Event Type"></p>
+
+        <p><input type="text"  name="eloc" placeholder="Enter Event Location"></p>
+
+        <p><input type="datetime-local"   name="edate" placeholder="Enter Event Start Date"></p>
+
+        <p><input type="datetime-local"   name="ddate" placeholder="Enter Event End Date"></p>
+
+
+      <p><input type="submit" value="Create Event"></p>
+
+
+
+    </fieldset>
+
+  </form>
+</body>
+
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Add a gray background color with some padding */
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  padding: 30px;
+  font-size: 40px;
+  text-align: center;
+  background: white;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {
+  float: left;
+  width: 75%;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  padding-left: 20px;
+}
+
+/* Fake image */
+.fakeimg {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 3px;
+}
+
+/* Add a card effect for articles */
+.card {
+   background-color: white;
+   padding: 20px;
+   margin-top: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+
+</style>
+</head>
+
+
+<div class="topnav">
+  <a href="/userevents">View {{ content }}'s Registered Events</a>
+  <a href="/registerevent">Register an Event</a>
+  <a class="active" href="/signout">Sign Out</a>
+  <a id="link" href="#" style="float: right;">Logged in as {{ content }}</a>
+</div>
+
+<body>
+
+<div class="header">
+  <h2>Welcome to EventsHub</h2>
+  <p style="font-size:24px"><em>Displaying Events created by all Users</em></p>
+</div>
+
+<div>
+</div>
+<div class="row">
+  <div class="leftcolumn">
+    {% if data|length == 0 %}
+      <h2>No Events created yet!</h2>
+    {% else %}
+      {% for i in range(data|length) %}
+        <div class="card">
+        <h2>{% print(data[i][0]) %}</h2>
+        <h5>{% print(data[i][1]) %}</h5>
+        <p>{% print(data[i][2]) %}</p>
+        <b><p>Start Date : {% print(data[i][3]) %}</p></b>
+        <b><p>End Date : {% print(data[i][4]) %}</p></b>
+       <p><em style="font-size:15px">Event Created By: </em>{% print(data[i][5]) %}</p>
+      </div>
+    {% endfor %}
+    {% endif %}
+<!--    </div>-->
+<!--    <div class="card">-->
+<!--      <h2>TITLE HEADING</h2>-->
+<!--      <h5>Title description, Sep 2, 2017</h5>-->
+<!--      <p>Some text..</p>-->
+<!--      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>-->
+<!--    </div>-->
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      <h2>About The Webpage</h2>
+      <p style="text-align:justify text-justify:inter-word;"><em>EventsHub is a model webpage designed using Python's Web Development Framework Flask to showcase fullstack web application development and also other python related feature such as Object Entity Relationship Model, Decorators for flask_login, User Sessions, Data Field Validations. Backend Database is housed in SQLAlchemy.</em></p>
+    </div>
+    <div class="card">
+      <h3>Our Current Active Users</h3>
+      {% for i in range(data2|length) %}
+        <div>{% print(data2[i][0]) %}</div>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <h3>Follow Me</h3>
+      <p>Git: <a href="https://github.com/mahesh2247">mahesh2247</a></p>
+      <p>Linkedin: <a href="https://www.linkedin.com/in/mahesh-m-53650b1a3/">mahesh-m</a></p>
+      <p>Google Mail: <a href="mahesh2247@gmail.com">mahesh2247@gmail.com</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p style="font-size:12px">© <em>https://github.com/mahesh2247</em></p>
+</div>
+
+
+
+<!--<div style="padding-left:16px">-->
+<!--  <h2>General Upcoming Events</h2>-->
+<!--  <p>Some content..</p>-->
+<!--</div>-->
+
+</body>
+</html>
