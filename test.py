@@ -7,8 +7,8 @@ cur.execute("SELECT * from user_model;")
 rows = cur.fetchall()
 
 
-for i in range(len(rows)):
-    print(rows[i][0])
+for i in rows:
+    print(i)
 
 
 # my_tup = (('mahesh', '123'), ('prakash', '456'))

@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, abort, session, url_for, redi
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import marshal_with, Api, Resource, fields
 import sqlite3
-from flask_login import user_logged_in, login_required
+from flask_login import login_user, current_user, logout_user, login_required, LoginManager, UserMixin
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -10,19 +11,56 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.secret_key = "mysecretkey"
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = '/'
+# login_manager.init_app(app)
+# login_manager.login_message_category = 'info'
 
 
-class UserModel(db.Model):
-    uname = db.Column(db.String(100), primary_key=True)
+class UserModel(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    uname = db.Column(db.String(100), unique=True)
     upasswd = db.Column(db.String(100), nullable=False)
+
+    # Flask-Login integration
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):  # line 37
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+    # Required for administrative interface
+    def __unicode__(self):
+        return self.uname
 
     def __repr__(self):
         return f"User(uname={self.uname}, upasswd={self.upasswd})"
 
 
+# @login_manager.user_loader
+# def load_user(user_id):
+#     # since the user_id is just the primary key of our user table, use it in the query for the user
+#     try:
+#         return UserModel.query.filter(id=user_id).first()
+#     except:
+#         return None
+
+@login_manager.user_loader
+def load_user(user_id):
+    return UserModel.query.get(int(user_id))
+
+
 resource_fields = {
-    'name': fields.String,
-    'passwd': fields.String
+    'id': fields.Integer,
+    'uname': fields.String,
+    'upasswd': fields.String
 }
 
 
@@ -48,6 +86,7 @@ resource_fields1 = {
 }
 
 
+
 # def dbcondec(dbcon):
 #     global con, user_list, cur, cur2, event_list
 #     def wrapper():
@@ -66,6 +105,7 @@ resource_fields1 = {
 
 
 
+
 @app.route('/register')
 def register():
     return render_template('registerpage.html')
@@ -77,18 +117,26 @@ def loginpage():
 
 
 @app.route('/main')
+@login_required
 def main():
-    con = sqlite3.connect('mydb.db')
-    cur = con.cursor()
-    cur2 = con.cursor()
-    cur.execute("SELECT * FROM create_event;")
-    event_list = cur.fetchall()
-    cur2.execute("SELECT * FROM user_model;")
-    user_list = cur2.fetchall()
-    return render_template('mainpage.html', content=session['user'], data=event_list, data2=user_list)
+    if current_user.is_authenticated:
+        con = sqlite3.connect('mydb.db')
+        cur = con.cursor()
+        cur2 = con.cursor()
+        cur.execute("SELECT * FROM create_event;")
+        event_list = cur.fetchall()
+        cur2.execute("SELECT * FROM user_model;")
+        user_list = cur2.fetchall()
+        query = UserModel.query.filter_by(uname=current_user.uname).first()
+        if query:
+            return render_template('mainpage.html', content=current_user.uname, data=event_list, data2=user_list)
+        else:
+            return redirect(url_for('loginpage'))
+    else:
+        return redirect(url_for('loginpage'))
 
 
-@app.route('/submitaction', methods=["POST"])
+@app.route('/submitaction', methods=["GET", "POST"])
 # @marshal_with(resource_fields)
 def submitact():
     con = sqlite3.connect('mydb.db')
@@ -105,11 +153,15 @@ def submitact():
         if query:
             if query.upasswd == passwd:
                 session["user"] = query.uname
-                return render_template('mainpage.html', content=query.uname, data=event_list, data2=user_list)
+                print(type(query))
+                login_user(query)
+                return render_template('mainpage.html', content=session['user'], data=event_list, data2=user_list)
             else:
                 abort(403, "Password is wrong! Please Check!")
         else:
             abort(403, "Register First!")
+
+    return redirect(url_for('loginpage'))
 
 
 @app.route('/registeraction', methods=["POST"])
@@ -174,8 +226,9 @@ def userevents():
 
 
 @app.route('/signout')
+@login_required
 def signout():
-    session.pop('user')
+    logout_user()
     return redirect(url_for('loginpage'))
 
 
