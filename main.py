@@ -173,15 +173,18 @@ def registeraction():
     upwd = request.form["passwd"]
     mpwd = request.form["repasswd"]
     if str(upwd) != str(mpwd):
-        abort(403, "passwords do not match!")
+        flash(f'''Passwords do not match , Please Check''', 'danger')
+        return redirect(url_for('register'))
     else:
         oname = UserModel.query.filter_by(uname=reguname).first()
         if oname:
-            abort(403, "User already Exists!")
+            flash(f'''User Already Exists , Please Sign-in''', 'info')
+            return redirect(url_for('loginpage'))
         else:
             my_data = UserModel(uname=reguname, upasswd=upwd)
             db.session.add(my_data)
             db.session.commit()
+            flash(f'''User Successfully Registered , Please Sign-in''', 'success')
             return redirect(url_for('loginpage'))
 
 

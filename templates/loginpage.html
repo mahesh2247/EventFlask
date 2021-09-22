@@ -176,6 +176,15 @@ form fieldset a:hover { text-decoration: underline; }
             {% endfor %}
         {% endif %}
     {% endwith %}
+          {% with messages = get_flashed_messages(category_filter=["info"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </head>
 <body>
 
