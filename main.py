@@ -212,10 +212,13 @@ def createevent():
             db.session.commit()
             con = sqlite3.connect('mydb.db')
             cur = con.cursor()
+            cur2 = con.cursor()
             cur.execute("SELECT * FROM create_event;")
+            cur2.execute("SELECT * FROM user_model;")
             event_list = cur.fetchall()
+            user_list = cur2.fetchall()
             flash(f'''Event Created Successfully!''', 'success')
-            return render_template("mainpage.html", data=event_list)
+            return render_template("mainpage.html", data=event_list, data2=user_list)
 
 
 @app.route('/userevents')
