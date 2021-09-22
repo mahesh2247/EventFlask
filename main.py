@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort, session, url_for, redirect
+from flask import Flask, render_template, request, abort, session, url_for, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import marshal_with, Api, Resource, fields
 import sqlite3
@@ -14,8 +14,7 @@ app.secret_key = "mysecretkey"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/'
-# login_manager.init_app(app)
-# login_manager.login_message_category = 'info'
+login_manager.login_message_category = 'danger'
 
 
 class UserModel(db.Model, UserMixin):
@@ -24,21 +23,21 @@ class UserModel(db.Model, UserMixin):
     upasswd = db.Column(db.String(100), nullable=False)
 
     # Flask-Login integration
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):  # line 37
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.id
-
-    # Required for administrative interface
-    def __unicode__(self):
-        return self.uname
+    # def is_authenticated(self):
+    #     return True
+    #
+    # def is_active(self):  # line 37
+    #     return True
+    #
+    # def is_anonymous(self):
+    #     return False
+    #
+    # def get_id(self):
+    #     return self.id
+    #
+    # # Required for administrative interface
+    # def __unicode__(self):
+    #     return self.uname
 
     def __repr__(self):
         return f"User(uname={self.uname}, upasswd={self.upasswd})"
@@ -159,7 +158,9 @@ def submitact():
             else:
                 abort(403, "Password is wrong! Please Check!")
         else:
-            abort(403, "Register First!")
+            flash(f'''Unknown User, Please register first!''', 'danger')
+            return redirect(url_for('loginpage'))
+            # abort(403, "Register First!")
 
     return redirect(url_for('loginpage'))
 
@@ -200,15 +201,17 @@ def createevent():
         eevedate = request.form["ddate"]
         my_query = CreateEvent.query.filter_by(ename=evename).first()
         if my_query:
-            abort(403, "Event Already Exists!")
+            flash(f'''Event name already exists!''', 'info')
+            return redirect(url_for('registerevent'))
         else:
-            m_data = CreateEvent(ename=evename, etype=evetype, eloc=eveloc, sdate=sevedate, edate=eevedate, creator=session['user'])
+            m_data = CreateEvent(ename=evename, etype=evetype, eloc=eveloc, sdate=sevedate, edate=eevedate, creator=current_user.uname)
             db.session.add(m_data)
             db.session.commit()
             con = sqlite3.connect('mydb.db')
             cur = con.cursor()
             cur.execute("SELECT * FROM create_event;")
             event_list = cur.fetchall()
+            flash(f'''Event Created Successfully!''', 'success')
             return render_template("mainpage.html", data=event_list)
 
 
@@ -229,6 +232,7 @@ def userevents():
 @login_required
 def signout():
     logout_user()
+    flash(f'''User signed out successfully!''', 'success')
     return redirect(url_for('loginpage'))
 
 

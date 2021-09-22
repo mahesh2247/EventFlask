@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+
 <style>
 body {
   margin: 0;
@@ -98,7 +101,7 @@ input[type="password"] {
 	height: 50px;
 	outline: none;
 	padding: 0px 10px;
-	width: 280px;
+	width: 300px;
 }
 
 form fieldset input[type="submit"] {
@@ -172,6 +175,7 @@ function myFunction() {
 }
   </script>
     <title>Login Here</title>
+
 </head>
 
 <div class="topnav" id="myTopnav">
@@ -194,16 +198,16 @@ function myFunction() {
     <fieldset>
 
 
-      <p><input type="text"  name="ename" placeholder="Enter Event Name"></p>
+      <p><input type="text"  name="ename" placeholder="Enter Event Name" required></p>
 
 
-      <p><input type="text"  name="etype" placeholder="Enter Event Type"></p>
+      <p><input type="text"  name="etype" placeholder="Enter Event Type" required></p>
 
-        <p><input type="text"  name="eloc" placeholder="Enter Event Location"></p>
+        <p><input type="text"  name="eloc" placeholder="Enter Event Location" required></p>
 
-        <p><input type="datetime-local"   name="edate" placeholder="Enter Event Start Date"></p>
+        <p><input type="datetime-local"   name="edate" placeholder="Enter Event Start Date" required></p>
 
-        <p><input type="datetime-local"   name="ddate" placeholder="Enter Event End Date"></p>
+        <p><input type="datetime-local"   name="ddate" placeholder="Enter Event End Date" required></p>
 
 
       <p><input type="submit" value="Create Event"></p>
@@ -214,6 +218,24 @@ function myFunction() {
 
   </form>
 </body>
+ {% with messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+ {% with messages = get_flashed_messages(category_filter=["info"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
 
 </html>
